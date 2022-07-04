@@ -1,34 +1,76 @@
-console.log("hello");
-function computerPlay(){
-        let computernumber= Math.floor((Math.random() * 3) + 1);
-    console.log(computernumber);
-    if (computernumber==1){
-         return "rock";
-    } else if (computernumber==2){
-        return "paper";} 
-        else {
-            return "scissors";
-        }
+const choices = ["rock","paper","scissors"];
+function game(){
+    for (let i = 1; i <= 5; i++) {
+        playRound(i)
+      }
+      logWinners();
+      
+}
+const winners=[];
+function playRound(round) {
+    const playerSelection = playerChoice();
+    const computerSelection = computerChoice();
+    //console.log(computerSelection);
+    const winner = checkWinner(playerSelection,computerSelection);
+    console.log(winner);
+    winners.push(winner);
+    logRound(playerSelection,computerSelection,winner,round)
+}
+function playerChoice(){
+let input = prompt("Please enter rock, paper or scissors.")
+while (input == null){
+     input = prompt("Please enter rock, paper or scissors.")
+}
+input= input.toLowerCase();
+let check = validateInput(input);
+if (check==true){
+    //console.log(input);
+}
+while (check==false){
+    input= prompt("Please enter rock, paper or scissors. Spelling must be exact but capitalization does not matter");
+    input= input.toLowerCase();
+    check = validateInput(input);
+    //console.log(input);    
+}
+return input;
+}
+function computerChoice(){
+   
+ return choices[Math.floor(Math.random()*choices.length)]
+}
+function validateInput(choice){
+    //this looks for the parameter in the choices array and reurns true if it is found
+    if (choices.includes(choice)){
+        return true;
+    } else{
+        return false;
     }
-let computerSelection= computerPlay();
-function inputPlay(){
-    userInput= prompt("Please enter rock paper or scissors");
-    // this makes sure that our game is non case sensitive
-    userInput= userInput.toLowerCase();
-// this line of code will validate and make sure the answer is one of the three options                        
-    while (userInput!="rock"&&userInput!="paper"&&userInput!="scissors"){
-        userInput= prompt("Please enter rock paper or scissors");
-       
 }
-return userInput;}
-
-
-let playerSelection= inputPlay();
-
-function playRound(playerSelection,computerSelection){
-    if (playerSelection===computerSelection){
-    console.log("It's a tie!")
-} else if(playerSelection=="rock"&&computerSelection=="scissors"){
-    console.log("You win!")
+function checkWinner(choiceP,choiceC){
+    if(choiceP === choiceC){
+        return "tie";
+    } else if((choiceP === "rock" && choiceC === "scissors") || 
+    (choiceP === "paper" && choiceC === "rock") || 
+    (choiceP === "scissors" && choiceC === "paper")){
+        return "Player";
+    } else {
+        return "Computer";
+    }
 }
-}
+function logWinners(){
+    
+        let playerWins = winners.filter((item) => item == "Player").length;
+        let computerWins = winners.filter((item) => item == "Computer").length;
+        let ties = winners.filter((item) => item == "Tie").length;
+        console.log("Results:");
+        console.log("Player Wins:", playerWins);
+        console.log("Computer Wins:", computerWins);
+        console.log("Ties:", ties);
+      }
+      function logRound(playerChoice,computerChoice,winner, round){
+        console.log("round is", round)
+        console.log("player chose: ", playerChoice)
+        console.log("computer chose: ", computerChoice)
+        console.log("winner is: ", winner);
+        console.log("-----------------------------------");
+      }
